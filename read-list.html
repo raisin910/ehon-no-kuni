@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>えほんをえらぶ - えほんのくに</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/read-list.css">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 背景要素 -->
+    <div class="sky-background"></div>
+    <div class="ground-background"></div>
+    
+    <!-- 装飾要素 -->
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+
+    <div id="app">
+        <!-- ヘッダー -->
+        <header class="header">
+            <button class="back-button" onclick="navigate('index.html')">
+                <img src="assets/images/icons/back-arrow.png" alt="もどる">
+            </button>
+            <h1>えほんを えらぶ</h1>
+            <button class="home-button" onclick="navigate('index.html')">
+                <img src="assets/images/icons/home-icon.png" alt="ホーム">
+            </button>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="main-content">
+            <!-- 管理者モードコントロール（非表示、管理者のみ使用） -->
+            <div class="admin-controls" id="admin-controls">
+                <div class="admin-title">
+                    <i class="fas fa-cog"></i> 管理者モード
+                </div>
+                <div class="admin-description">
+                    現在、管理者モードになっています。絵本の追加・編集が可能です。
+                </div>
+            </div>
+            
+            <!-- 絵本棚 -->
+            <div class="bookshelf">
+                <h2 class="bookshelf-title">おすすめ えほん</h2>
+                
+                <div class="books-grid" id="books-grid">
+                    <!-- 管理者用の追加ボタン（管理者モード時のみ表示） -->
+                    <div class="add-book" id="add-book-btn" style="display: none;">
+                        <div class="add-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <div class="add-text">あたらしい<br>えほんを<br>ついか</div>
+                    </div>
+                    
+                    <!-- 絵本データは JavaScript で動的に生成 -->
+                    <div class="loading-spinner" id="loading-spinner"></div>
+                </div>
+                
+                <!-- 絵本がない場合（初期状態） -->
+                <div class="no-books" id="no-books" style="display: none;">
+                    <p>まだ えほんが ありません</p>
+                    <button class="user-books-btn" onclick="navigate('user-books.html')">
+                        つくった えほんを みる
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <!-- マスコットエリア -->
+        <div class="mascot-area">
+            <div class="speech-bubble">
+                <p>どの えほんが すき？</p>
+            </div>
+            <img src="assets/images/characters/mascot.png" alt="マスコット" class="mascot-img">
+        </div>
+        
+        <!-- 管理者モード切り替えボタン（隠しボタン） -->
+        <button class="admin-mode-toggle" id="admin-mode-toggle">
+            <i class="fas fa-unlock-alt"></i> 管理者モード
+        </button>
+        
+        <!-- 絵本追加モーダル -->
+        <div class="modal" id="add-book-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">新しい絵本を追加</h3>
+                    <button class="close-modal" id="close-modal">&times;</button>
+                </div>
+                
+                <form id="add-book-form">
+                    <div class="form-group">
+                        <label for="book-title" class="form-label">タイトル</label>
+                        <input type="text" id="book-title" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cover-image" class="form-label">表紙画像URL</label>
+                        <input type="text" id="cover-image" class="form-input" placeholder="assets/images/books/example/cover.png">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="book-author" class="form-label">作者</label>
+                        <input type="text" id="book-author" class="form-input" value="管理者">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">新着表示</label>
+                        <div>
+                            <input type="checkbox" id="is-new">
+                            <label for="is-new">新着絵本として表示する</label>
+                        </div>
+                    </div>
+                    
+                    <div class="pages-section">
+                        <h4 class="pages-title">
+                            <i class="fas fa-book-open"></i> ページ
+                        </h4>
+                        
+                        <div class="page-items" id="page-items">
+                            <!-- ページは JavaScript で動的に生成 -->
+                        </div>
+                        
+                        <button type="button" class="add-page-btn" id="add-page-btn">
+                            <i class="fas fa-plus"></i> ページを追加
+                        </button>
+                    </div>
+                    
+                    <button type="submit" class="form-button">
+                        絵本を保存
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- ページ編集モーダル -->
+        <div class="modal" id="edit-page-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">ページを編集</h3>
+                    <button class="close-modal" id="close-page-modal">&times;</button>
+                </div>
+                
+                <form id="edit-page-form">
+                    <input type="hidden" id="edit-page-number">
+                    
+                    <div class="form-group">
+                        <label for="page-text" class="form-label">ページテキスト</label>
+                        <textarea id="page-text" class="form-textarea" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="page-image" class="form-label">ページ画像URL</label>
+                        <input type="text" id="page-image" class="form-input" placeholder="assets/images/books/example/page1.png">
+                    </div>
+                    
+                    <button type="submit" class="form-button">
+                        ページを保存
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/adminBookManager.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 絵本データを読み込む
+            loadOfficialBooks();
+            
+            // 管理者モード機能を初期化
+            initAdminMode();
+        });
+        
+        // 絵本データを読み込む
+        function loadOfficialBooks() {
+            const booksGrid = document.getElementById('books-grid');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const noBooks = document.getElementById('no-books');
+            
+            // ローカルストレージから管理者絵本を取得
+            try {
+                const officialBooks = JSON.parse(localStorage.getItem('officialBooks') || '[]');
+                
+                // 少し遅延させて読み込み中のアニメーションを表示
+                setTimeout(() => {
+                    // 絵本がない場合
+                    if (officialBooks.length === 0) {
+                        loadingSpinner.style.display = 'none';
+                        noBooks.style.display = 'block';
+                        
+                        // 管理者モードの場合は追加ボタンを表示
+                        const isAdminMode = localStorage.getItem('adminMode') === 'true';
+                        if (isAdminMode) {
+                            document.getElementById('add-book-btn').style.display = 'flex';
+                        }
+                    } else {
+                        // 絵本データを表示
+                        loadingSpinner.style.display = 'none';
+                        
+                        // 管理者モードの場合は追加ボタンを表示
+                        const isAdminMode = localStorage.getItem('adminMode') === 'true';
+                        if (isAdminMode) {
+                            document.getElementById('add-book-btn').style.display = 'flex';
+                        }
+                        
+                        // 絵本データを表示
+                        displayOfficialBooks(officialBooks);
+                    }
+                }, 800);
+                
+            } catch (error) {
+                console.error('絵本データの読み込みに失敗しました:', error);
+                loadingSpinner.style.display = 'none';
+                noBooks.style.display = 'block';
+                noBooks.innerHTML = `
+                    <p>えほんの よみこみに しっぱいしました</p>
+                    <button class="user-books-btn" onclick="navigate('/')">
+                        もどる
+                    </button>
+                `;
+            }
+        }
+        
+        // 絵本データを表示
+        function displayOfficialBooks(books) {
+            const booksGrid = document.getElementById('books-grid');
+            const addBookBtn = document.getElementById('add-book-btn');
+            
+            // 既存の絵本を削除（追加ボタンは残す）
+            const existingBooks = booksGrid.querySelectorAll('.book');
+            existingBooks.forEach(book => book.remove());
+            
+            // 絵本データを表示
+            books.forEach(book => {
+                const bookElement = createBookElement(book);
+                
+                // 追加ボタンの前に挿入
+                if (addBookBtn) {
+                    booksGrid.insertBefore(bookElement, addBookBtn);
+                } else {
+                    booksGrid.appendChild(bookElement);
+                }
+            });
+        }
+        
+        // 絵本要素を作成
+        function createBookElement(book) {
+            const bookElement = document.createElement('div');
+            bookElement.className = 'book';
+            bookElement.onclick = () => {
+                navigate('read.html', { id: book.id, type: 'official' });
+            };
+            
+            bookElement.innerHTML = `
+                <div class="book-inner">
+                    <div class="book-cover">
+                        <img src="${book.coverImage || 'assets/images/book-placeholder.png'}" alt="${book.title}" class="cover-image">
+                        <div class="book-title">${book.title}</div>
+                        ${book.isNew ? '<span class="new-badge">NEW</span>' : ''}
+                    </div>
+                    <div class="book-spine"></div>
+                    <div class="book-pages"></div>
+                </div>
+            `;
+            
+            return bookElement;
+        }
+        
+        // 管理者モード機能を初期化
+        function initAdminMode() {
+            const adminModeToggle = document.getElementById('admin-mode-toggle');
+            const adminControls = document.getElementById('admin-controls');
+            const addBookBtn = document.getElementById('add-book-btn');
+            
+            // 管理者モードの状態を確認
+            const isAdminMode = localStorage.getItem('adminMode') === 'true';
+            
+            // 管理者モードの初期状態を設定
+            if (isAdminMode) {
+                adminModeToggle.classList.add('active');
+                adminControls.classList.add('active');
+                addBookBtn.style.display = 'flex';
+            }
+            
+            // 管理者モード切り替えボタンのイベント
+            adminModeToggle.addEventListener('click', () => {
+                const currentMode = localStorage.getItem('adminMode') === 'true';
+                const newMode = !currentMode;
+                
+                // 管理者モードの状態を保存
+                localStorage.setItem('adminMode', newMode);
+                
+                // UI の更新
+                if (newMode) {
+                    adminModeToggle.classList.add('active');
+                    adminControls.classList.add('active');
+                    addBookBtn.style.display = 'flex';
+                } else {
+                    adminModeToggle.classList.remove('active');
+                    adminControls.classList.remove('active');
+                    addBookBtn.style.display = 'none';
+                }
+            });
+            
+            // 絵本追加ボタンのイベント
+            addBookBtn.addEventListener('click', () => {
+                openAddBookModal();
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>えほんを よむ - えほんのくに</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+/* 絵本読み画面専用CSS */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* 背景スタイル */
+.sky-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    background: linear-gradient(to bottom, #7CB9E8 0%, #B6D7F2 100%);
+    z-index: -2;
+}
+
+.ground-background {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    background: linear-gradient(to bottom, #A8D67B 0%, #8BC34A 100%);
+    z-index: -2;
+}
+
+/* 雲の装飾 */
+.cloud {
+    position: fixed;
+    background: white;
+    border-radius: 100px;
+    opacity: 0.8;
+    z-index: -1;
+}
+
+.cloud1 {
+    width: 180px;
+    height: 60px;
+    top: 50px;
+    left: 10%;
+    animation: float-cloud 20s infinite ease-in-out;
+}
+
+.cloud2 {
+    width: 140px;
+    height: 50px;
+    top: 100px;
+    right: 15%;
+    animation: float-cloud 25s infinite ease-in-out;
+}
+
+.cloud3 {
+    width: 160px;
+    height: 55px;
+    top: 150px;
+    left: 25%;
+    animation: float-cloud 22s infinite ease-in-out;
+}
+
+@keyframes float-cloud {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(30px);
+    }
+}
+
+/* ヘッダー */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 28px;
+    margin: 0;
+    color: #FF6B6B;
+    text-shadow: 1px 1px 0 #fff;
+}
+
+.back-button,
+.home-button {
+    width: 60px;
+    height: 60px;
+    background: white;
+    border: 3px solid #FF8A48;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 0 #D16A33;
+}
+
+.back-button:hover,
+.home-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 0 #D16A33;
+}
+
+.back-button img,
+.home-button img {
+    width: 30px;
+    height: 30px;
+}
+
+/* 絵本コンテナ */
+.book-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* 絵本情報 */
+.book-info {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 20px 20px 0 0;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.book-info h2 {
+    font-size: 32px;
+    color: #FF6B6B;
+    margin: 0 0 10px 0;
+    text-shadow: 1px 1px 0 white;
+}
+
+.book-info .author {
+    font-size: 18px;
+    color: #666;
+    margin: 0;
+}
+
+/* 絵本本体 */
+.book-content {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ページ番号 */
+.page-number {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: #FF8A48;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 3px 0 #D16A33;
+    z-index: 2;
+}
+
+/* ページコンテンツ */
+.page-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 40px 40px;
+    text-align: center;
+}
+
+/* ページ画像 */
+.page-image {
+    max-width: 100%;
+    max-height: 350px;
+    object-fit: contain;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    background: #FFF3E0;
+    border: 3px solid #FFE0B2;
+}
+
+/* ページテキスト */
+.page-text {
+    font-size: 24px;
+    line-height: 1.8;
+    color: #333;
+    max-width: 800px;
+    margin: 0 auto;
+    font-weight: 500;
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    border: 2px solid #FFE0B2;
+    white-space: pre-wrap;
+}
+
+/* ページナビゲーション */
+.page-navigation {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px 40px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 0 0 20px 20px;
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 25px;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 0;
+}
+
+.prev-btn {
+    background: #4390C6;
+    color: white;
+    box-shadow: 0 5px 0 #2E6B99;
+}
+
+.next-btn {
+    background: #FF8A48;
+    color: white;
+    box-shadow: 0 5px 0 #D16A33;
+}
+
+.nav-btn:hover:not(.disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 0;
+}
+
+.nav-btn:active:not(.disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 0;
+}
+
+.nav-btn.disabled {
+    background: #ccc;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: 0 5px 0 #aaa;
+}
+
+.nav-btn.disabled:hover {
+    transform: none;
+    box-shadow: 0 5px 0 #aaa;
+}
+
+.nav-btn i {
+    font-size: 18px;
+}
+
+/* マスコットエリア */
+.mascot-area {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.mascot-area:hover {
+    transform: translateY(-5px);
+}
+
+.mascot-img {
+    width: 120px;
+    height: auto;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+}
+
+.speech-bubble {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border-radius: 15px;
+    padding: 10px 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    min-width: 120px;
+    text-align: center;
+}
+
+.speech-bubble:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px 10px 0;
+    border-style: solid;
+    border-color: white transparent transparent;
+}
+
+.speech-bubble p {
+    margin: 0;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+/* エラーメッセージ */
+.error-message {
+    text-align: center;
+    padding: 60px 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    border: 3px dashed #FFB6C1;
+}
+
+.error-message p {
+    font-size: 24px;
+    color: #FF6B6B;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.error-message i {
+    font-size: 30px;
+}
+
+.back-btn {
+    padding: 15px 30px;
+    background: #FF8A48;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 0 #D16A33;
+}
+
+.back-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 0 #D16A33;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .header {
+        padding: 10px 15px;
+    }
+    
+    .header h1 {
+        font-size: 22px;
+    }
+    
+    .back-button,
+    .home-button {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .back-button img,
+    .home-button img {
+        width: 25px;
+        height: 25px;
+    }
+    
+    .book-container {
+        padding: 10px;
+    }
+    
+    .book-info h2 {
+        font-size: 26px;
+    }
+    
+    .page-content {
+        padding: 40px 20px 20px;
+    }
+    
+    .page-image {
+        max-height: 250px;
+        margin-bottom: 20px;
+    }
+    
+    .page-text {
+        font-size: 20px;
+        padding: 15px;
+    }
+    
+    .page-navigation {
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .nav-btn {
+        padding: 12px 20px;
+        font-size: 18px;
+        justify-content: center;
+    }
+    
+    .mascot-area {
+        bottom: 10px;
+        right: 10px;
+    }
+    
+    .mascot-img {
+        width: 80px;
+    }
+    
+    .speech-bubble {
+        top: -50px;
+        padding: 8px 12px;
+    }
+    
+    .speech-bubble p {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .book-info {
+        padding: 15px;
+    }
+    
+    .book-info h2 {
+        font-size: 22px;
+    }
+    
+    .page-content {
+        padding: 30px 15px 15px;
+    }
+    
+    .page-text {
+        font-size: 18px;
+        padding: 12px;
+    }
+    
+    .nav-btn {
+        padding: 10px 15px;
+        font-size: 16px;
+    }
+    
+    .error-message p {
+        font-size: 20px;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- 背景要素 -->
+    <div class="sky-background"></div>
+    <div class="ground-background"></div>
+    
+    <!-- 装飾要素 -->
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+
+    <div id="app">
+        <!-- ヘッダー -->
+        <header class="header">
+            <button class="back-button" id="back-button">
+                <img src="assets/images/icons/back-arrow.png" alt="もどる">
+            </button>
+            <h1>えほんを よむ</h1>
+            <button class="home-button" onclick="navigate('index.html')">
+                <img src="assets/images/icons/home-icon.png" alt="ホーム">
+            </button>
+        </header>
+
+        <!-- 絵本コンテンツ -->
+        <div class="book-container">
+            <!-- 絵本情報 -->
+            <div class="book-info">
+                <h2 id="book-title">えほんタイトル</h2>
+                <p class="author">さくしゃ: <span id="book-author">さくしゃ名</span></p>
+            </div>
+            
+            <!-- 絵本本体 -->
+            <div class="book-content" id="book-content">
+                <div class="page-number" id="page-number">1 / 12</div>
+                
+                <div class="page-content">
+                    <img id="page-image" class="page-image" src="" alt="イラスト" style="display: none;">
+                    <p id="page-text" class="page-text">ページテキスト</p>
+                </div>
+                
+                <!-- ページナビゲーション -->
+                <div class="page-navigation">
+                    <button id="prev-btn" class="nav-btn prev-btn disabled">
+                        <i class="fas fa-chevron-left"></i> まえ
+                    </button>
+                    <button id="next-btn" class="nav-btn next-btn">
+                        つぎ <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- マスコットエリア -->
+        <div class="mascot-area">
+            <div class="speech-bubble">
+                <p>えほんを よんでるよ！</p>
+            </div>
+            <img src="assets/images/characters/mascot.png" alt="マスコット" class="mascot-img">
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/readViewer.js"></script>
+    <script>
+        // URLパラメータから絵本IDを取得
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookId = urlParams.get('id');
+        const bookType = urlParams.get('type') || 'user';
+        
+        console.log('読み込み開始:', { bookId, bookType });
+        
+        // 戻るボタンの処理（重複を避けるため、readViewer.jsで処理）
+        // キーボードイベント（重複を避けるため、readViewer.jsで処理）
+    </script>
+</body>
+</html>

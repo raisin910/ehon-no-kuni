@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>えほんをつくる - えほんのくに</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/create.css">
+    <link rel="stylesheet" href="css/freeInput.css">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 背景要素 -->
+    <div class="sky-background"></div>
+    <div class="ground-background"></div>
+    
+    <!-- 装飾要素 -->
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+
+    <div id="app">
+        <!-- ヘッダー -->
+        <header class="header">
+            <button class="back-button" onclick="navigate('/')">
+                <img src="assets/images/icons/back-arrow.png" alt="もどる">
+            </button>
+            <h1>えほんをつくる</h1>
+            <button class="home-button" onclick="navigate('/')">
+                <img src="assets/images/icons/home-icon.png" alt="ホーム">
+            </button>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="main-content">
+            <!-- モード選択画面 -->
+            <section id="mode-selection" class="screen active">
+                <h2>どっちで つくる？</h2>
+                <div class="mode-buttons">
+                    <button class="mode-button free-mode" onclick="startFreeMode()">
+                        <span class="mode-icon">✏️</span>
+                        <span class="mode-title">じゆうに つくる</span>
+                        <span class="mode-description">おはなしを かんがえて つくる</span>
+                    </button>
+                    <button class="mode-button select-mode" onclick="startSelectMode()">
+                        <span class="mode-icon">🎯</span>
+                        <span class="mode-title">えらんで つくる</span>
+                        <span class="mode-description">キャラクターを えらんで つくる</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 自由入力モード -->
+            <section id="free-input-screen" class="screen">
+                <div class="free-input-container">
+                    <h2>どんな おはなしが よみたい？</h2>
+                    
+                    <textarea id="story-input" 
+                              placeholder="れい：そらをとぶ ねこの ぼうけん"
+                              rows="4"></textarea>
+                    
+                    <div class="input-buttons">
+                        <button class="voice-input-btn" onclick="startVoiceInput()">
+                            <img src="assets/images/icons/microphone-icon.png" alt="マイク">
+                            <span>おはなしする</span>
+                        </button>
+                    </div>
+                    
+                    <div class="input-hints">
+                        <p>たとえば...</p>
+                        <div class="hint-buttons">
+                            <button class="hint-btn" onclick="useHint('うちゅうに いく おはなし')">
+                                うちゅうに いく おはなし
+                            </button>
+                            <button class="hint-btn" onclick="useHint('まほうが つかえる どうぶつ')">
+                                まほうが つかえる どうぶつ
+                            </button>
+                            <button class="hint-btn" onclick="useHint('ともだちと たからさがし')">
+                                ともだちと たからさがし
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button class="next-btn" onclick="confirmFreeInput()" disabled>
+                        つぎへ
+                    </button>
+                </div>
+            </section>
+
+            <!-- 選択モード：キャラクター選択 -->
+            <section id="character-selection" class="screen">
+                <h2>だれが しゅじんこう？</h2>
+                <div class="selection-grid">
+                    <button class="selection-item" data-character="cat">
+                        <img src="assets/images/characters/cat.png" alt="ねこ">
+                        <span>ねこ</span>
+                    </button>
+                    <button class="selection-item" data-character="rabbit">
+                        <img src="assets/images/characters/rabbit.png" alt="うさぎ">
+                        <span>うさぎ</span>
+                    </button>
+                    <button class="selection-item" data-character="bear">
+                        <img src="assets/images/characters/bear.png" alt="くま">
+                        <span>くま</span>
+                    </button>
+                    <button class="selection-item" data-character="girl">
+                        <img src="assets/images/characters/girl.png" alt="おんなのこ">
+                        <span>おんなのこ</span>
+                    </button>
+                    <button class="selection-item" data-character="boy">
+                        <img src="assets/images/characters/boy.png" alt="おとこのこ">
+                        <span>おとこのこ</span>
+                    </button>
+                    <button class="selection-item" data-character="robot">
+                        <img src="assets/images/characters/robot.png" alt="ロボット">
+                        <span>ロボット</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 選択モード：舞台選択 -->
+            <section id="setting-selection" class="screen">
+                <h2>どこで おはなしが おきる？</h2>
+                <div class="selection-grid">
+                    <button class="selection-item" data-setting="forest">
+                        <img src="assets/images/settings/forest.png" alt="もり">
+                        <span>もり</span>
+                    </button>
+                    <button class="selection-item" data-setting="ocean">
+                        <img src="assets/images/settings/ocean.png" alt="うみ">
+                        <span>うみ</span>
+                    </button>
+                    <button class="selection-item" data-setting="space">
+                        <img src="assets/images/settings/space.png" alt="うちゅう">
+                        <span>うちゅう</span>
+                    </button>
+                    <button class="selection-item" data-setting="city">
+                        <img src="assets/images/settings/city.png" alt="まち">
+                        <span>まち</span>
+                    </button>
+                    <button class="selection-item" data-setting="castle">
+                        <img src="assets/images/settings/castle.png" alt="おしろ">
+                        <span>おしろ</span>
+                    </button>
+                    <button class="selection-item" data-setting="candy">
+                        <img src="assets/images/settings/candy.png" alt="おかしのくに">
+                        <span>おかしのくに</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 選択モード：テーマ選択 -->
+            <section id="theme-selection" class="screen">
+                <h2>どんな おはなし？</h2>
+                <div class="selection-grid">
+                    <button class="selection-item" data-theme="friendship">
+                        <img src="assets/images/themes/friendship.png" alt="ともだち">
+                        <span>ともだち</span>
+                    </button>
+                    <button class="selection-item" data-theme="treasure">
+                        <img src="assets/images/themes/treasure.png" alt="たからさがし">
+                        <span>たからさがし</span>
+                    </button>
+                    <button class="selection-item" data-theme="helping">
+                        <img src="assets/images/themes/helping.png" alt="たすける">
+                        <span>たすける</span>
+                    </button>
+                    <button class="selection-item" data-theme="adventure">
+                        <img src="assets/images/themes/adventure.png" alt="ぼうけん">
+                        <span>ぼうけん</span>
+                    </button>
+                    <button class="selection-item" data-theme="magic">
+                        <img src="assets/images/themes/magic.png" alt="まほう">
+                        <span>まほう</span>
+                    </button>
+                    <button class="selection-item" data-theme="party">
+                        <img src="assets/images/themes/party.png" alt="パーティー">
+                        <span>パーティー</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 確認画面 -->
+            <section id="confirmation-screen" class="screen">
+                <h2>これで いいかな？</h2>
+                <div class="confirmation-content">
+                    <div id="free-input-confirmation" class="confirmation-item" style="display: none;">
+                        <h3>おはなし：</h3>
+                        <p id="input-text-display"></p>
+                    </div>
+                    <div id="select-mode-confirmation" style="display: none;">
+                        <div class="confirmation-item">
+                            <h3>しゅじんこう：</h3>
+                            <div class="selected-display" id="character-display"></div>
+                        </div>
+                        <div class="confirmation-item">
+                            <h3>ばしょ：</h3>
+                            <div class="selected-display" id="setting-display"></div>
+                        </div>
+                        <div class="confirmation-item">
+                            <h3>おはなし：</h3>
+                            <div class="selected-display" id="theme-display"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="confirmation-buttons">
+                    <button class="restart-btn" onclick="restartCreation()">
+                        <img src="assets/images/icons/restart-icon.png" alt="やりなおす">
+                        やりなおす
+                    </button>
+                    <button class="generate-btn" onclick="generateStory()">
+                        <img src="assets/images/icons/magic-icon.png" alt="つくる">
+                        えほんを つくる！
+                    </button>
+                </div>
+            </section>
+
+            <!-- 生成中画面 -->
+            <section id="generating-screen" class="screen">
+                <div class="generating-content">
+                    <div class="magic-animation">
+                        <img src="assets/images/magic-wand.png" alt="まほうのつえ" class="wand-icon">
+                    </div>
+                    <h2 class="generating-text">まほうで おはなしを つくっています...</h2>
+                    <div class="generating-progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 完成画面 -->
+            <section id="complete-screen" class="screen">
+                <div class="complete-content">
+                    <h2>えほんが できたよ！</h2>
+                    <div class="story-preview">
+                        <h3 id="story-title"></h3>
+                        <p id="story-summary"></p>
+                    </div>
+                    <div class="complete-buttons">
+                        <button class="read-btn" onclick="readStory()">
+                            <img src="assets/images/icons/book-icon.png" alt="よむ">
+                            よむ
+                        </button>
+                        <button class="edit-btn" onclick="editStory()">
+                            <img src="assets/images/icons/pencil-icon.png" alt="なおす">
+                            なおす
+                        </button>
+                        <button class="new-btn" onclick="createNewStory()">
+                            <img src="assets/images/icons/new-icon.png" alt="あたらしく">
+                            あたらしく つくる
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- マスコットエリア -->
+        <div class="mascot-area">
+            <img src="assets/images/characters/mascot.png" alt="マスコット" class="mascot-img">
+        </div>
+
+        <!-- 音声入力オーバーレイ -->
+        <div id="voice-input-overlay" class="voice-overlay">
+            <div class="voice-content">
+                <div class="voice-animation">
+                    <div class="voice-wave"></div>
+                </div>
+                <p class="voice-status">おはなしを きいています...</p>
+                <div class="voice-result" id="voice-result"></div>
+                <button class="voice-stop-btn" onclick="stopVoiceInput()">
+                    おわり
+                </button>
+            </div>
+        </div>
+
+        <!-- ローディングオーバーレイ -->
+        <div id="loading-overlay" class="loading-overlay">
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/storyCreator.js"></script>
+    <script src="js/freeInputMode.js"></script>
+    <script src="js/voiceInput.js"></script>
+    <script src="js/geminiStoryGenerator.js"></script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>つくった えほん - えほんのくに</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/read-list.css">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 背景要素 -->
+    <div class="sky-background"></div>
+    <div class="ground-background"></div>
+    
+    <!-- 装飾要素 -->
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+
+    <div id="app">
+        <!-- ヘッダー -->
+        <header class="header">
+            <button class="back-button" onclick="navigate('read-list.html')">
+                <img src="assets/images/icons/back-arrow.png" alt="もどる">
+            </button>
+            <h1>つくった えほん</h1>
+            <button class="home-button" onclick="navigate('index.html')">
+                <img src="assets/images/icons/home-icon.png" alt="ホーム">
+            </button>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="main-content">
+            <!-- 絵本棚 -->
+            <div class="bookshelf">
+                <h2 class="bookshelf-title">きみの えほん</h2>
+                
+                <div class="books-grid" id="books-grid">
+                    <!-- 絵本データは JavaScript で動的に生成 -->
+                    <div class="loading-spinner" id="loading-spinner"></div>
+                </div>
+                
+                <!-- 絵本がない場合 -->
+                <div class="no-books" id="no-books" style="display: none;">
+                    <p>まだ じぶんの えほんが ありません</p>
+                    <button class="user-books-btn" onclick="navigate('create.html')">
+                        <i class="fas fa-pencil-alt"></i> えほんを つくる
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <!-- マスコットエリア -->
+        <div class="mascot-area">
+            <div class="speech-bubble">
+                <p>きみの えほん だよ！</p>
+            </div>
+            <img src="assets/images/characters/mascot.png" alt="マスコット" class="mascot-img">
+        </div>
+        
+        <!-- 作成ボタン（フローティング） -->
+        <button class="user-books-btn" style="position: fixed; bottom: 20px; right: 20px; margin: 0; z-index: 100;" onclick="navigate('create.html')">
+            <i class="fas fa-pencil-alt"></i> あたらしく つくる
+        </button>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ユーザー作成絵本を読み込む
+            loadUserBooks();
+        });
+        
+        // ユーザー作成絵本を読み込む
+        function loadUserBooks() {
+            const booksGrid = document.getElementById('books-grid');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const noBooks = document.getElementById('no-books');
+            
+            // ローカルストレージからユーザー作成絵本を取得
+            try {
+                const userBooks = JSON.parse(localStorage.getItem('generatedStories') || '[]');
+                
+                // 少し遅延させて読み込み中のアニメーションを表示
+                setTimeout(() => {
+                    // 絵本がない場合
+                    if (userBooks.length === 0) {
+                        loadingSpinner.style.display = 'none';
+                        noBooks.style.display = 'block';
+                    } else {
+                        // 絵本データを表示
+                        loadingSpinner.style.display = 'none';
+                        displayUserBooks(userBooks);
+                    }
+                }, 800);
+                
+            } catch (error) {
+                console.error('絵本データの読み込みに失敗しました:', error);
+                loadingSpinner.style.display = 'none';
+                noBooks.style.display = 'block';
+                noBooks.innerHTML = `
+                    <p>えほんの よみこみに しっぱいしました</p>
+                    <button class="user-books-btn" onclick="navigate('/')">
+                        もどる
+                    </button>
+                `;
+            }
+        }
+        
+        // ユーザー絵本データを表示
+        function displayUserBooks(books) {
+            const booksGrid = document.getElementById('books-grid');
+            
+            // 既存の絵本を削除
+            booksGrid.innerHTML = '';
+            
+            // 絵本データを表示
+            books.forEach(book => {
+                const bookElement = createBookElement(book);
+                booksGrid.appendChild(bookElement);
+            });
+            
+            // 絵本がない場合
+            if (books.length === 0) {
+                document.getElementById('no-books').style.display = 'block';
+            }
+        }
+        
+        // 絵本要素を作成
+        function createBookElement(book) {
+            const bookElement = document.createElement('div');
+            bookElement.className = 'book';
+            bookElement.onclick = () => {
+                navigate('read.html', { id: book.id, type: 'user' });
+            };
+            
+            // 作成日時をフォーマット
+            const date = new Date(book.createdAt);
+            const formattedDate = date.toLocaleDateString('ja-JP', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            // ユーザー絵本用の背景色（グラデーション）
+            const randomGradient = getRandomGradient();
+            
+            bookElement.innerHTML = `
+                <div class="book-inner">
+                    <div class="book-cover" style="background: ${randomGradient}">
+                        <img src="assets/images/user-book-icon.png" alt="${book.title}" class="cover-image" style="height: 50%; object-fit: contain; background: transparent;">
+                        <div class="book-title">${book.title || 'タイトルなし'}</div>
+                        <div style="font-size: 12px; color: white; margin-top: 5px;">${formattedDate}</div>
+                    </div>
+                    <div class="book-spine"></div>
+                    <div class="book-pages"></div>
+                </div>
+            `;
+            
+            return bookElement;
+        }
+        
+        // ランダムなグラデーション背景を生成
+        function getRandomGradient() {
+            const gradients = [
+                'linear-gradient(45deg, #FF9A9E, #FAD0C4)',
+                'linear-gradient(45deg, #A1C4FD, #C2E9FB)',
+                'linear-gradient(45deg, #FFECD2, #FCB69F)',
+                'linear-gradient(45deg, #FF9A9E, #FECFEF)',
+                'linear-gradient(45deg, #F6D365, #FDA085)',
+                'linear-gradient(45deg, #BFE9FF, #FF9A9E)',
+                'linear-gradient(45deg, #FBC2EB, #A6C1EE)',
+                'linear-gradient(45deg, #FDA085, #F6D365)',
+                'linear-gradient(45deg, #84FAB0, #8FD3F4)',
+                'linear-gradient(45deg, #D4FC79, #96E6A1)'
+            ];
+            
+            return gradients[Math.floor(Math.random() * gradients.length)];
+        }
+    </script>
+</body>
+</html>

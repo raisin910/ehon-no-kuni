@@ -1,0 +1,17 @@
+{
+  "name": "ehon-no-kuni",
+  "version": "1.0.0",
+  "description": "子ども向け絵本アプリ「えほんのくに」",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx live-server --port=3000",
+    "start": "npx live-server --port=3000",
+    "serve": "python -m http.server 3000"
+  },
+  "keywords": ["絵本", "子供向け", "教育"],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

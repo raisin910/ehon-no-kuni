@@ -1,0 +1,749 @@
+/* 絵本一覧のスタイル - 絵本の形のレイアウト */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+}
+
+/* 背景スタイル - ホームと同じデザイン */
+.sky-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    background: linear-gradient(to bottom, #7CB9E8 0%, #B6D7F2 100%);
+    z-index: -2;
+}
+
+.ground-background {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    background: linear-gradient(to bottom, #A8D67B 0%, #8BC34A 100%);
+    z-index: -2;
+}
+
+/* 雲の装飾 */
+.cloud {
+    position: fixed;
+    background: white;
+    border-radius: 100px;
+    opacity: 0.8;
+    z-index: -1;
+}
+
+.cloud1 {
+    width: 180px;
+    height: 60px;
+    top: 50px;
+    left: 10%;
+    animation: float-cloud 20s infinite ease-in-out;
+}
+
+.cloud2 {
+    width: 140px;
+    height: 50px;
+    top: 100px;
+    right: 15%;
+    animation: float-cloud 25s infinite ease-in-out;
+}
+
+.cloud3 {
+    width: 160px;
+    height: 55px;
+    top: 150px;
+    left: 25%;
+    animation: float-cloud 22s infinite ease-in-out;
+}
+
+@keyframes float-cloud {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(30px);
+    }
+}
+
+/* ヘッダー改善 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
+}
+
+.header h1 {
+    font-size: 28px;
+    margin: 0;
+    color: #FF6B6B;
+    text-shadow: 1px 1px 0 #fff;
+}
+
+.back-button,
+.home-button {
+    width: 60px;
+    height: 60px;
+    background: white;
+    border: 3px solid #FF8A48;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 0 #D16A33;
+}
+
+.back-button:hover,
+.home-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 0 #D16A33;
+}
+
+.back-button:active,
+.home-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 0 #D16A33;
+}
+
+.back-button img,
+.home-button img {
+    width: 30px;
+    height: 30px;
+}
+
+/* メインコンテンツ */
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* 絵本棚 */
+.bookshelf {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+    min-height: 500px;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.bookshelf-title {
+    text-align: center;
+    font-size: 28px;
+    color: #FF6B6B;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 0 white;
+}
+
+/* 絵本グリッド */
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2.5rem;
+    padding: 1rem;
+}
+
+/* 絵本スタイル - 実際の本のような外観 */
+.book {
+    height: 280px;
+    width: 200px;
+    position: relative;
+    perspective: 1500px;
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+.book-inner {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: rotateY(0deg);
+    transition: transform 0.5s ease;
+    position: relative;
+}
+
+.book:hover .book-inner {
+    transform: rotateY(30deg);
+}
+
+/* 本の表紙 */
+.book-cover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px 15px 15px 5px;
+    background: linear-gradient(45deg, #FF8A48, #FF6B6B);
+    box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.2),
+        10px 0 15px -10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow: hidden;
+    backface-visibility: hidden;
+}
+
+/* 本の背表紙 */
+.book-spine {
+    position: absolute;
+    height: 100%;
+    width: 20px;
+    left: 0;
+    background: #FF6B6B;
+    border-radius: 5px 0 0 5px;
+    transform: rotateY(-90deg) translateX(-10px);
+    transform-origin: left;
+    box-shadow: inset -2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 本のページ部分 */
+.book-pages {
+    position: absolute;
+    width: 95%;
+    height: 97%;
+    top: 1.5%;
+    right: 1%;
+    background: white;
+    border-radius: 0 5px 5px 0;
+    transform: translateZ(-1px);
+    box-shadow: inset 3px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 表紙画像 */
+.cover-image {
+    width: 90%;
+    height: 60%;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 3px solid white;
+    margin-top: 1rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    background-color: #FFF3E0;
+}
+
+/* 絵本タイトル */
+.book-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    margin: 0.5rem 0;
+    max-height: 40px;
+    overflow: hidden;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 管理者用の追加ボタン */
+.add-book {
+    height: 280px;
+    width: 200px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 3px dashed #FF8A48;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 auto;
+}
+
+.add-book:hover {
+    background: white;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.add-icon {
+    font-size: 40px;
+    color: #FF8A48;
+    margin-bottom: 1rem;
+}
+
+.add-text {
+    font-size: 18px;
+    color: #FF8A48;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* 管理者モード切り替えボタン */
+.admin-mode-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 0.8rem 1.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #4390C6;
+    border-radius: 50px;
+    color: #4390C6;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 100;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-mode-toggle:hover {
+    background: #4390C6;
+    color: white;
+}
+
+.admin-mode-toggle.active {
+    background: #4390C6;
+    color: white;
+}
+
+/* 管理者モード時のコントロール */
+.admin-controls {
+    display: none;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.admin-controls.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.admin-title {
+    font-size: 20px;
+    color: #FF6B6B;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.admin-title i {
+    font-size: 24px;
+}
+
+.admin-description {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+/* マスコットエリア */
+.mascot-area {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.mascot-area:hover {
+    transform: translateY(-5px);
+}
+
+.mascot-img {
+    width: 150px;
+    height: auto;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+}
+
+.speech-bubble {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border-radius: 15px;
+    padding: 10px 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    min-width: 120px;
+    text-align: center;
+}
+
+.speech-bubble:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px 10px 0;
+    border-style: solid;
+    border-color: white transparent transparent;
+}
+
+.speech-bubble p {
+    margin: 0;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+/* 絵本がない場合 */
+.no-books {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    border: 3px dashed #FFB6C1;
+}
+
+.no-books p {
+    font-size: 24px;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+/* ユーザー絵本ボタン */
+.user-books-btn {
+    display: inline-block;
+    padding: 1.2rem 2.5rem;
+    font-size: 20px;
+    font-weight: bold;
+    background: #FF8A48;
+    color: white;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 0 #D16A33;
+    margin-top: 1rem;
+}
+
+.user-books-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 0 #D16A33;
+}
+
+.user-books-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 0 #D16A33;
+}
+
+/* モーダル */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    max-width: 600px;
+    width: 100%;
+    padding: 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px dashed #FFB6C1;
+}
+
+.modal-title {
+    font-size: 24px;
+    color: #FF6B6B;
+    margin: 0;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+    color: #FF6B6B;
+    transform: scale(1.2);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    border-color: #4390C6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(67, 144, 198, 0.2);
+}
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-button {
+    padding: 1rem 2rem;
+    background: #FF8A48;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 0 #D16A33;
+    margin-top: 1rem;
+}
+
+.form-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 0 #D16A33;
+}
+
+.form-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 0 #D16A33;
+}
+
+/* ページ管理部分 */
+.pages-section {
+    margin-top: 2rem;
+}
+
+.pages-title {
+    font-size: 20px;
+    color: #4390C6;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.page-items {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.page-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem;
+    border-bottom: 1px solid #eee;
+}
+
+.page-item:last-child {
+    border-bottom: none;
+}
+
+.page-number {
+    font-weight: bold;
+    color: #FF6B6B;
+    min-width: 30px;
+}
+
+.page-text {
+    flex: 1;
+    font-size: 14px;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.page-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.page-edit-btn,
+.page-delete-btn {
+    background: none;
+    border: none;
+    color: #4390C6;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+.page-edit-btn:hover {
+    color: #FF8A48;
+}
+
+.page-delete-btn:hover {
+    color: #FF6B6B;
+}
+
+.add-page-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background: #4390C6;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.add-page-btn:hover {
+    background: #3A7CAB;
+}
+
+/* ローディングスピナー */
+.loading-spinner {
+    width: 80px;
+    height: 80px;
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #FF8A48;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 3rem auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .header {
+        padding: 10px 15px;
+    }
+    
+    .header h1 {
+        font-size: 22px;
+    }
+    
+    .back-button,
+    .home-button {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .back-button img,
+    .home-button img {
+        width: 25px;
+        height: 25px;
+    }
+    
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .books-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .book,
+    .add-book {
+        height: 240px;
+        width: 160px;
+    }
+    
+    .book-title {
+        font-size: 14px;
+    }
+    
+    .mascot-area {
+        bottom: 10px;
+        left: 10px;
+    }
+    
+    .mascot-img {
+        width: 100px;
+    }
+    
+    .speech-bubble {
+        top: -50px;
+        padding: 8px 12px;
+    }
+    
+    .speech-bubble p {
+        font-size: 14px;
+    }
+    
+    .admin-mode-toggle {
+        bottom: 10px;
+        right: 10px;
+        padding: 0.6rem 1rem;
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>えほんをなおす - えほんのくに</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/edit.css">
+</head>
+<body>
+    <div id="app">
+        <!-- ヘッダー -->
+        <header class="header">
+            <button class="back-button" onclick="goBack()">
+                <img src="assets/images/icons/back-arrow.png" alt="もどる">
+            </button>
+            <h1>えほんを なおす</h1>
+            <button class="save-button" onclick="saveEdits()">
+                <img src="assets/images/icons/save-icon.png" alt="ほぞん">
+                ほぞん
+            </button>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="edit-container">
+            <!-- ページリスト -->
+            <div class="page-list">
+                <h3>ページ</h3>
+                <div id="page-thumbnails" class="page-thumbnails">
+                    <!-- ページサムネイルが動的に追加される -->
+                </div>
+                <button class="add-page-btn" onclick="addNewPage()">
+                    <img src="assets/images/icons/add-icon.png" alt="ついか">
+                    ページを ついか
+                </button>
+            </div>
+
+            <!-- 編集エリア -->
+            <div class="edit-area">
+                <!-- 現在のページ -->
+                <div class="current-page">
+                    <div class="page-header">
+                        <span class="page-number">ページ <span id="current-page-num">1</span></span>
+                        <div class="page-actions">
+                            <button onclick="deletePage()" class="delete-btn">
+                                <img src="assets/images/icons/delete-icon.png" alt="さくじょ">
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- テキスト編集エリア -->
+                    <div class="text-edit-area">
+                        <textarea id="page-text" class="page-text-editor" 
+                                  placeholder="ここに ぶんしょうを かいてね"
+                                  onchange="updatePageText()"></textarea>
+                    </div>
+                    
+                    <!-- 音声録音エリア -->
+                    <div class="audio-area">
+                        <h4>こえを いれる</h4>
+                        <div class="audio-controls">
+                            <button id="record-btn" class="record-btn" onclick="toggleRecording()">
+                                <img src="assets/images/icons/record-icon.png" alt="ろくおん">
+                                <span>ろくおん</span>
+                            </button>
+                            <button id="play-btn" class="play-btn" onclick="playAudio()" style="display: none;">
+                                <img src="assets/images/icons/play-icon.png" alt="さいせい">
+                                <span>きく</span>
+                            </button>
+                            <button id="delete-audio-btn" class="delete-audio-btn" onclick="deleteAudio()" style="display: none;">
+                                <img src="assets/images/icons/delete-icon.png" alt="けす">
+                                <span>けす</span>
+                            </button>
+                        </div>
+                        <div id="recording-status" class="recording-status"></div>
+                    </div>
+                </div>
+
+                <!-- プレビューエリア -->
+                <div class="preview-area">
+                    <h4>プレビュー</h4>
+                    <div class="preview-page">
+                        <p id="preview-text"></p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- ツールバー -->
+        <div class="edit-toolbar">
+            <button onclick="showTitleEdit()" class="toolbar-btn">
+                <img src="assets/images/icons/title-icon.png" alt="タイトル">
+                タイトル
+            </button>
+            <button onclick="reorderPages()" class="toolbar-btn">
+                <img src="assets/images/icons/reorder-icon.png" alt="ならびかえ">
+                ならびかえ
+            </button>
+            <button onclick="previewStory()" class="toolbar-btn">
+                <img src="assets/images/icons/preview-icon.png" alt="プレビュー">
+                ぜんたいを みる
+            </button>
+        </div>
+
+        <!-- タイトル編集モーダル -->
+        <div id="title-edit-modal" class="modal">
+            <div class="modal-content">
+                <h3>タイトルを かえる</h3>
+                <input type="text" id="title-input" class="title-input" placeholder="あたらしい タイトル">
+                <div class="modal-buttons">
+                    <button onclick="closeTitleEdit()">やめる</button>
+                    <button onclick="saveTitleEdit()">けってい</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 録音中オーバーレイ -->
+        <div id="recording-overlay" class="recording-overlay">
+            <div class="recording-content">
+                <div class="recording-animation">
+                    <div class="record-dot"></div>
+                </div>
+                <p>ろくおんちゅう...</p>
+                <button onclick="stopRecording()" class="stop-recording-btn">
+                    とめる
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/storyEditor.js"></script>
+    <script src="js/audioRecorder.js"></script>
+    <script src="js/pageManager.js"></script>
+</body>
+</html>

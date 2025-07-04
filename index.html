@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>えほんのくに</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- 背景要素 -->
+        <div class="sky-background"></div>
+        <div class="ground-background"></div>
+        
+        <!-- 装飾要素 -->
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
+        <div class="dot dot1"></div>
+        <div class="dot dot2"></div>
+        <div class="dot dot3"></div>
+        <div class="dot dot4"></div>
+        <div class="dot dot5"></div>
+        
+        <!-- ロゴエリア -->
+        <div class="logo-area">
+            <div class="logo-cloud">
+                <h1 class="logo-text">えほんのくに</h1>
+            </div>
+        </div>
+
+        <!-- メインナビゲーション -->
+        <div class="main-nav">
+            <div class="nav-button read-button" onclick="navigate('read-list.html')">
+                <div class="button-icon">
+                    <img src="assets/images/icons/book-icon.png" alt="よむ">
+                </div>
+                <span class="button-text">よむ</span>
+            </div>
+                        
+            <div class="nav-button create-button" onclick="navigate('create.html')">
+                <div class="button-icon">
+                    <img src="assets/images/icons/pencil-icon.png" alt="つくる">
+                </div>
+                <span class="button-text">つくる</span>
+            </div>
+        </div>
+
+        <!-- マスコットキャラクター -->
+        <div class="mascot">
+            <div class="speech-bubble">
+                <p>こんにちは！</p>
+            </div>
+            <img src="assets/images/characters/mascot.png" alt="ガイドキャラクター" class="mascot-img">
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+</body>
+</html>
