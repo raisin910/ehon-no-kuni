@@ -5,7 +5,7 @@
 
 // Gemini APIキーをグローバル変数として設定
 // 以下の文字列を実際のAPIキーに置き換えてください
-window.GEMINI_API_KEY = 'AIzaSyB3d9Ye_7jmaDoEecgYqqABcYPY3hiPHcQ';
+window.GEMINI_API_KEY = 'YOUR_API_KEY_HERE';  // ← 修正
 
 // その他の設定
 window.API_CONFIG = {
@@ -16,12 +16,12 @@ window.API_CONFIG = {
     RATE_LIMIT_PER_MINUTE: 60,
     
     // 開発モード（true: テンプレート使用、false: API使用）
-    DEV_MODE: false  // ← これをfalseに変更！（重要な修正点）
+    DEV_MODE: true  // ← falseからtrueに修正
 };
 
-// APIキーのバリデーション
+// 以下は変更なし
 function validateAPIKey() {
-    if (!window.GEMINI_API_KEY || window.GEMINI_API_KEY === 'YOUR_ACTUAL_API_KEY_HERE') {
+    if (!window.GEMINI_API_KEY || window.GEMINI_API_KEY === 'YOUR_API_KEY_HERE') {
         console.error('⚠️ Gemini APIキーが設定されていません！');
         console.log('1. https://aistudio.google.com/app/apikey でAPIキーを取得');
         console.log('2. config.jsのGEMINI_API_KEYに設定');
